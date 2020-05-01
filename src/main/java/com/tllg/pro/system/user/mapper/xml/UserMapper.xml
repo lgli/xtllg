@@ -1,0 +1,83 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tllg.pro.system.user.mapper.UserMapper">
+
+    <select id="selectUserResourcesByUserUniqueSign" resultType="com.tllg.pro.system.resource.entity.ResourceInfo">
+        SELECT
+        DISTINCT
+        resource_info.RESOURCE_ID resourceId,
+        resource_info.RESOURCE_CODE resourceCode,
+        resource_info.RESOURCE_TYPE resourceType,
+        resource_info.RESOURCE_NAME resourceName,
+        resource_info.RESOURCE_PARENT resourceParent,
+        resource_info.RESOURCE_STATUS resourceStatus,
+        resource_info.RESOURCE_CREATER resourceCreater,
+        resource_info.RESOURCE_CREATE_DATE resourceCreateDate,
+        resource_info.RESOURCE_ICON resourceIcon,
+        resource_info.RESOURCE_PATH resourcePath,
+        resource_info.RESOURCE_UPDATER resourceUpdater,
+        resource_info.RESOURCE_UPDATE_DATE resourceUpdateDate,
+        resource_info.RESOURCE_ORDER resourceOrder
+        FROM
+        user_basic_info
+        INNER JOIN user_role_relate ON user_basic_info.USER_ID = user_role_relate.USER_BASIC_ID
+        INNER JOIN resource_role_relate ON user_role_relate.ROLE_INFO_ID = resource_role_relate.ROLE_ID
+        INNER JOIN resource_info ON resource_role_relate.RESOURCE_ID = resource_info.RESOURCE_ID
+        WHERE user_basic_info.USER_UNIQUE_SIGN = #{userSign}
+        <if test="type != null and type != ''">
+            and  resource_info.RESOURCE_TYPE = #{type}
+        </if>
+        ORDER BY resource_info.RESOURCE_ORDER
+    </select>
+
+    <select id="selectMain" resultType="java.lang.String">
+        select USER_UNIQUE_SIGN from user_basic_info where USER_ID = '1'
+    </select>
+
+    <select id="selectUserByUserUniqueSign" resultType="com.tllg.pro.system.user.entity.UserBaseInfo">
+        SELECT
+            USER_ID userId,
+            USER_UNIQUE_SIGN userUniqueSign,
+            USER_PASSWORD userPassword,
+            USER_NAME userName,
+            USER_SEX userSex,
+            USER_BIRTHDAY userBirthday,
+            USER_EDUCATION userEducation,
+            USER_CONTACT userContact,
+            USER_STATUS userStatus,
+            USER_CREATER userCreater,
+            USER_CREATE_DATE userCreateDate,
+            USER_UPDATER userUpdater,
+            USER_UPDATE_DATE userUpdateDate
+        FROM
+            user_basic_info
+        WHERE
+            1 = 1
+            AND USER_UNIQUE_SIGN = #{userSign}
+            AND user_basic_info.USER_STATUS in (${status})
+    </select>
+
+    <select id="selectUserRolesByUserUniqueSign" resultType="com.tllg.pro.system.role.entity.RoleBaseInfo">
+          SELECT
+                DISTINCT
+                role_info.ROLE_ID roleId,
+                role_info.ROLE_CODE roleCode,
+                role_info.ROLE_STATUS roleStatus,
+                role_info.ROLE_CREATER roleCreater,
+                role_info.ROLE_CREATE_DATE roleCreateDate,
+                role_info.ROLE_NAME roleName,
+                role_info.ROLE_REMARK roleRemark,
+                role_info.ROLE_UPDATER roleUpdater,
+                role_info.ROLE_UPDATE_DATE roleUpdateDate,
+                role_info.ROLE_PARENT_ID roleParentId
+          FROM
+                user_basic_info
+          INNER JOIN user_role_relate ON user_basic_info.USER_ID = user_role_relate.USER_BASIC_ID
+          INNER JOIN role_info ON user_role_relate.ROLE_INFO_ID = role_info.ROLE_ID
+          WHERE user_basic_info.USER_UNIQUE_SIGN = #{userSign}
+          ORDER BY role_info.ROLE_ID
+    </select>
+    
+
+</mapper>
