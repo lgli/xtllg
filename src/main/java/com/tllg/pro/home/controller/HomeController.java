@@ -21,11 +21,12 @@ public class HomeController {
     /**
      * 进入主页面
      * @param request request
-     * @param response response
      * @return String
      */
     @RequestMapping("/entryHomeIndex")
-    public String entryHomeIndex(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public String entryHomeIndex(HttpServletRequest request) throws Exception{
+//        String requestURI = request.getRequestURI();
+
         UserBaseSys userUniqueSign = MyUserUtil.getUserUniqueSign();
         //设置菜单权限
         request.setAttribute("menu",userUniqueSign.getUserResource());

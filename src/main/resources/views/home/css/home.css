@@ -74,7 +74,7 @@ body .el-container {
 
 
 
-/*因为组件js控制鼠标移入移除修改背景色的原因，这里修改了源element.js文件代码，修改this.rootMenu.backgroundColor，注释掉的部分*/
+/*因为组件js控制鼠标移入移除修改背景色的原因，这里修改了element.js文件源码，修改this.rootMenu.backgroundColor，注释掉的部分*/
 .el-submenu__title,.el-menu-item{
     padding-left:20px !important;
     text-align: left;
